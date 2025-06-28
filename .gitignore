@@ -103,3 +103,7 @@ Thumbs.db
 
 # CloudFormation
 *.template.yaml.bak 
+# Ignore local secret files
+.env
+frontend/.env
+backend/.env
