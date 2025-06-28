@@ -1,6 +1,6 @@
 # VeneerVision AI S3 Handler Lambda Function
 
-This Lambda function automatically processes images uploaded to the `veneer-vision-site-vvjun28` S3 bucket by applying AI-powered veneer transformations using the Replicate API.
+This Lambda function automatically processes images uploaded to the `veneer-vision-site-vvjune28` S3 bucket by applying AI-powered veneer transformations using the Replicate API.
 
 ## Features
 
