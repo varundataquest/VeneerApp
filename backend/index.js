@@ -15,6 +15,16 @@ app.use(cors({
 }));
 app.use(bodyParser.json({ limit: '10mb' }));
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    version: '1.0.0',
+    model: 'sourav-sarkar-doc32/smile-correct'
+  });
+});
+
 // Helper function to poll for prediction completion with increased timeout
 async function pollPrediction(predictionId, timeout = 240000) { // Increased to 4 minutes
   const pollInterval = 2000; // 2 seconds
