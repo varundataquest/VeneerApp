@@ -1,135 +1,113 @@
 # 🦷 VeneerVision AI
 
-**VeneerVision AI** is a full-stack web application that uses AI to simulate dental veneers on uploaded smile images. Built with a React frontend and Express backend, powered by the Replicate API, it enables users to preview different veneer styles and shades in real time.
+**VeneerVision AI** is a full-stack web application that uses AI to simulate dental veneers on smile images. Built with a React frontend and Express backend, powered by the Replicate API, it enables users to upload or capture a smile photo, select veneer shades, and view AI-generated previews. Designed for both patients and dentists, it features a quiz, lead capture, PDF reports, and a "Dentist Mode" for advanced simulations.
 
 ---
 
 ## 🚀 Features
-- **AI-Powered Veneer Simulation**: Generate realistic veneer previews using the `sourav-sarkar-doc32/smile-correct` model via Replicate API.
-- **Multiple Image Generation**: Dentist mode for up to 4 veneer variations per upload.
-- **Smile Style Quiz**: Personalized recommendations based on user preferences.
-- **Drag & Drop Upload + Camera Capture**: User-friendly image input.
-- **PDF Report Generation**: Downloadable veneer preview reports.
-- **Lead Capture**: Collects user info for follow-up.
-- **Cloud-Ready Architecture**: Designed for easy deployment to AWS.
+- **AI-Powered Veneer Simulation** (Replicate API: `sourav-sarkar-doc32/smile-correct`)
+- **Multiple Image Generation** (Dentist Mode: up to 4 variations)
+- **Smile Style Quiz** for personalized recommendations
+- **Drag & Drop Upload** and **Camera Capture**
+- **PDF Report Generation**
+- **Lead Capture** (with dentist info option)
+- **Downloadable Results**
+- **Modern, Responsive UI**
 
 ---
 
-## 🏗️ Project Structure
-```
-veneer-vision-ai/
-├── backend/      # Express.js API server
-├── frontend/     # React.js client app
-├── README.md     # This file
-└── ...
-```
+## 🏃‍♂️ How to Run Locally
 
----
-
-## 💻 How to Run Locally
-
-### 1. Clone the repository
-```
+### 1. Clone the Repository
+```bash
 git clone https://github.com/varundataquest/VeneerApp.git
 cd VeneerApp
 ```
 
-### 2. Install dependencies
-```
+### 2. Install Dependencies
+```bash
 cd backend && npm install
 cd ../frontend && npm install
 ```
 
-### 3. Set up environment variables
+### 3. Set Up Environment Variables
 - Copy `.env.example` to `.env` in `backend/` and add your Replicate API key:
 ```
 REPLICATE_API_TOKEN=your_replicate_api_token
 ```
 
-### 4. Start the servers
+### 4. Start the App
 - In one terminal:
-```
+```bash
 cd backend && npm start
 ```
 - In another terminal:
-```
+```bash
 cd frontend && npm start
 ```
-- Frontend: [http://localhost:3000](http://localhost:3000)
-- Backend: [http://localhost:5001](http://localhost:5001)
+- Visit [http://localhost:3000](http://localhost:3000)
 
 ---
 
 ## 🌥️ About the `cloud` Branch
 This branch contains all code and configuration for cloud deployment, including:
-- Cloud-ready `.gitignore` and environment management
-- Modular backend/frontend for containerization
-- AWS deployment instructions and IaC (if present)
+- Cloud-ready `.gitignore` and environment setup
+- Modular backend/frontend structure
+- Scripts and documentation for AWS deployment
 
 ---
 
 ## ☁️ AWS Cloud Integration Plan
+**Goal:** Deploy VeneerVision AI as a scalable, production-grade cloud application using AWS services.
 
-### **1. Backend (Express API) on AWS Elastic Beanstalk**
-- **Dockerize** the backend or use Node.js platform
-- Deploy via Elastic Beanstalk CLI or AWS Console
-- Use environment variables for secrets
+### 1. **Frontend Hosting**
+- **Amazon S3 + CloudFront**: Host the React build as a static website with global CDN.
+- **Steps:**
+  - Build frontend: `cd frontend && npm run build`
+  - Upload `frontend/build/` to an S3 bucket
+  - Set up S3 static website hosting
+  - Configure CloudFront for HTTPS and caching
 
-### **2. Frontend (React) on AWS S3 + CloudFront**
-- Build the React app: `npm run build`
-- Upload `frontend/build/` to an S3 bucket
-- Set up S3 static website hosting
-- Distribute via CloudFront for global CDN
+### 2. **Backend/API Hosting**
+- **AWS Elastic Beanstalk** (Node.js environment) or **AWS Lambda + API Gateway**
+- **Elastic Beanstalk Steps:**
+  - Zip the `backend/` folder (with `package.json`)
+  - Deploy via AWS Console or CLI
+  - Set environment variables (API keys, etc)
+- **Lambda Steps (Serverless):**
+  - Refactor Express routes as Lambda handlers
+  - Use AWS API Gateway to expose endpoints
+  - Store secrets in AWS Secrets Manager or SSM
 
-### **3. API Gateway + Lambda (Optional Serverless)**
-- Refactor backend endpoints as AWS Lambda functions
-- Use API Gateway to expose REST endpoints
-- Store images in S3, trigger Lambda for processing
+### 3. **File Storage**
+- **Amazon S3**: Store uploaded images and generated results
+- Update backend to upload/download files from S3
 
-### **4. CI/CD with GitHub Actions & AWS CodePipeline**
-- Set up GitHub Actions to build/test on push
-- Deploy to Elastic Beanstalk/S3 automatically
-- Use AWS CodePipeline for multi-stage deployments
+### 4. **CI/CD Pipeline**
+- **GitHub Actions**: Automate build, test, and deploy to AWS (Elastic Beanstalk, S3, Lambda)
+- Example: On push to `cloud` branch, trigger deployment jobs
 
-### **5. Secrets & Monitoring**
-- Store API keys in AWS Secrets Manager or SSM Parameter Store
-- Enable CloudWatch for logs and alarms
+### 5. **Monitoring & Security**
+- **AWS CloudWatch**: Monitor logs and metrics
+- **IAM Roles/Policies**: Secure access to S3, Lambda, etc
+- **HTTPS**: Enforce via CloudFront and API Gateway
 
-### **6. (Optional) Database Integration**
-- Use Amazon DynamoDB or RDS for persistent lead storage
-
----
-
-## 📝 Example AWS Deployment Steps
-
-### **Elastic Beanstalk (Backend)**
-1. Install EB CLI: `pip install awsebcli`
-2. Initialize: `eb init -p node.js veneer-vision-backend`
-3. Deploy: `eb create veneer-backend-env`
-4. Set env vars: `eb setenv REPLICATE_API_TOKEN=...`
-
-### **S3 + CloudFront (Frontend)**
-1. Build: `cd frontend && npm run build`
-2. Create S3 bucket & enable static hosting
-3. Upload `build/` contents
-4. Set up CloudFront distribution
-
-### **Serverless (Optional)**
-- Use AWS SAM or Serverless Framework to deploy Lambda/API Gateway
+### 6. **(Optional) Domain & SSL**
+- Use **Route 53** for custom domain
+- Attach SSL certificate via AWS Certificate Manager
 
 ---
 
-## 📚 Resume/Portfolio Highlights
-- **Cloud-Native Full Stack App**: Designed for AWS deployment
-- **CI/CD Automation**: GitHub Actions + AWS
-- **Serverless & Containerization**: Ready for Lambda, ECS, or Beanstalk
-- **Modern Frontend/Backend**: React, Express, RESTful APIs
-- **AI/ML Integration**: Replicate API for real-world inference
+## 📝 Resume Highlights (Cloud Engineer)
+- Designed and deployed a full-stack AI web app on AWS (S3, CloudFront, Elastic Beanstalk/Lambda, API Gateway)
+- Implemented CI/CD with GitHub Actions
+- Used AWS IAM, CloudWatch, and Secrets Manager for security and monitoring
+- Built scalable, modular infrastructure for production workloads
 
 ---
 
 ## 🤝 Contributing
-Pull requests welcome! For major changes, open an issue first.
+Pull requests welcome! For major changes, open an issue first to discuss what you'd like to change.
 
 ---
 
@@ -138,14 +116,9 @@ MIT
 
 ---
 
-## 🙋 FAQ
-- **Q: How do I deploy to AWS?**
-  See the AWS Cloud Integration Plan above.
-- **Q: How do I run locally?**
-  See the steps above.
-- **Q: What is the `cloud` branch?**
-  The branch for cloud deployment and AWS integration.
+## 💡 Inspiration
+This project demonstrates modern cloud-native app development, AI integration, and best practices for scalable deployment.
 
 ---
 
-**Built by [varundataquest](https://github.com/varundataquest) — Cloud Engineer Portfolio Project** 
+**Questions?** Open an issue or contact [varundataquest](https://github.com/varundataquest) on GitHub. 
